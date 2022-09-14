@@ -16,8 +16,8 @@ CMD_MUTE = 'MUTE;'
 CMD_VFO_LIMITS = 'VFO_LIMITS:10000,30000000;'
 CMD_CW = 'cw_msg:RA6LH;'
 CMD_DDS_READ = 'DDS:1;'
-CMD_DDS_WRITE = 'DDS:0,{};'
-CMD_VFO_WRITE = 'VFO:0,A,{};'
+CMD_DDS_WRITE = 'DDS:1,{};'
+CMD_VFO_WRITE = 'VFO:0,0,{};'
 
 
 class TCI_Connection(Thread):
@@ -56,10 +56,11 @@ class TCI_Connection(Thread):
     def set_freq(self, freq):
         if not self.__ws:
             return
-        s = str(CMD_DDS_WRITE).format(freq)
+        s = str(CMD_VFO_WRITE).format(freq)
         self.__mutex.acquire()
         self.__queue.append(s)
         self.__mutex.release()
+
 
 terminate = False
 tci = None
@@ -70,6 +71,7 @@ def handler(signum, frame):
     terminate = True
     if tci:
         tci.set_terminate()
+
 
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, handler)
@@ -82,6 +84,5 @@ if __name__ == "__main__":
         print('freq {}'.format(freq))
         freq += 1
         time.sleep(0.5)
-
 
     tci.join()
