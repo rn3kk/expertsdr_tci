@@ -20,7 +20,7 @@ CMD_DDS_WRITE = 'DDS:0,{};'
 CMD_VFO_WRITE = 'VFO:0,A,{};'
 
 
-class TCI_Connction(Thread):
+class TCI_Connection(Thread):
 
     def __init__(self):
         Thread.__init__(self)
@@ -74,7 +74,7 @@ def handler(signum, frame):
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, handler)
     signal.signal(signal.SIGTERM, handler)
-    tci = TCI_Connction()
+    tci = TCI_Connection()
     tci.start()
     freq = 7000000
     while not terminate:
